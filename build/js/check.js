@@ -12,13 +12,13 @@ function getMessage(a, b) {
         case 'number':
             return "Переданное SVG-изображение содержит " + a + " объектов и " + b * 4 + " атрибутов";
         case 'object':
-            if (typeof b === 'object') {
+            if (Array.isArray(a) && Array.isArray(b)) {
                 var square = 0;
                 for (i = 0; i < a.length; i++) {
                     square += a[i] + b[i];
                 }
                 return "Общая площадь артефактов сжатия: " + square + " пикселей"
-            } else {
+            } else if (Array.isArray(a)) {
                 var sum = 0;
                 for (i = 0; i < a.length; i++) {
                     sum += a[i];
