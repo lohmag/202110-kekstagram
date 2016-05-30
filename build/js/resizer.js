@@ -59,7 +59,7 @@
      */
     _element: null,
 
-    /**
+    /*
      * Положение курсора в момент перетаскивания. От положения курсора
      * рассчитывается смещение на которое нужно переместить изображение
      * за каждую итерацию перетаскивания.
@@ -88,6 +88,7 @@
       // canvas'a поэтому важно вовремя поменять их, если нужно начать отрисовку
       // чего-либо с другой обводкой.
 
+
       // Толщина линии.
       this._ctx.lineWidth = 6;
       // Цвет обводки.
@@ -107,19 +108,25 @@
 
       var displX = -(this._resizeConstraint.x + this._resizeConstraint.side / 2);
       var displY = -(this._resizeConstraint.y + this._resizeConstraint.side / 2);
-      // Отрисовка изображения на холсте. Параметры задают изображение, которое
+      // Отрисовка изображения на холсте. Параметры задают изображение, которое```````````````````
       // нужно отрисовать и координаты его верхнего левого угла.
       // Координаты задаются от центра холста.
-      this._ctx.drawImage(this._image, displX, displY);
-
-      // Отрисовка прямоугольника, обозначающего область изображения после
-      // кадрирования. Координаты задаются от центра.
-      this._ctx.strokeRect(
+      this._ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+      this._ctx.fillRect(-this._container.width / 2, -this._container.width / 2, this._container.width, this._container.height * 2);
+      this._ctx.clearRect(
           (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
           (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
           this._resizeConstraint.side - this._ctx.lineWidth / 2,
           this._resizeConstraint.side - this._ctx.lineWidth / 2);
-
+      this._ctx.drawImage(this._image, displX, displY);
+      // Отрисовка прямоугольника, обозначающего область изображения после
+      // кадрирования. Координаты задаются от центра.
+      /*this._ctx.strokeRect(
+          (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+          (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+          this._resizeConstraint.side - this._ctx.lineWidth / 2,
+          this._resizeConstraint.side - this._ctx.lineWidth / 2);
+*/
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
       // следующий кадр рисовался с привычной системой координат, где точка
@@ -127,6 +134,10 @@
       // некорректно сработает даже очистка холста или нужно будет использовать
       // сложные рассчеты для координат прямоугольника, который нужно очистить.
       this._ctx.restore();
+      //this._ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+     // this._ctx.fillRect(-this._container.width / 2, -this._container.width / 2, this._container.width, this._container.height * 2);
+      //this._ctx.fillRect(0, 0, this._container.width, this._container.height);
+
     },
 
     /**
