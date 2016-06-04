@@ -169,7 +169,6 @@
         document.querySelector('#resize-fwd').className = document.querySelector('#resize-fwd').className.replace(/\sdisabled/g, '');
         return false;
       }
-
     };
   }
   /**
