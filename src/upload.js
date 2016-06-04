@@ -144,14 +144,14 @@
 
     x.oninput = function() {
       setSideConstraint(x, y, side);
-    }
+    };
     y.oninput = function() {
       setSideConstraint(x, y, side);
-    }
+    };
     side.oninput = function() {
       setSideConstraint(x, y, side);
-    }
-    var setSideConstraint = function(left, top, side) {
+    };
+    var setSideConstraint = function(left, top, s) {
       if (left.valueAsNumber + side.valueAsNumber > currentResizer._image.naturalWidth || top.valueAsNumber + side.valueAsNumber > currentResizer._image.naturalHeight) {
         document.querySelector('#resize-fwd').className += ' disabled';
         left.max = currentResizer._image.naturalWidth - side.valueAsNumber;
@@ -159,11 +159,11 @@
         top.max = currentResizer._image.naturalHeight - side.valueAsNumber;
         top.setCustomValidity = 'Максимальное значение ' + top.max;
         if (left.valueAsNumber > top.valueAsNumber) {
-          side.max = currentResizer._image.naturalWidth - left.valueAsNumber;
+          s.max = currentResizer._image.naturalWidth - left.valueAsNumber;
         } else {
-          side.max = currentResizer._image.naturalHeight - top.valueAsNumber;
+          s.max = currentResizer._image.naturalHeight - top.valueAsNumber;
         }
-        side.setCustomValidity = 'Максимальное значение ' + side.max;
+        s.setCustomValidity = 'Максимальное значение ' + s.max;
         return true;
       } else {
         document.querySelector('#resize-fwd').className = document.querySelector('#resize-fwd').className.replace(/\sdisabled/g, '');
