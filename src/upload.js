@@ -45,8 +45,7 @@
    * Удаляет текущий объект {@link Resizer}, чтобы создать новый с другим
    * изображением.
    */
-  validateForm();
-  setUploadFilterDefault()
+
   function cleanupResizer() {
     if (currentResizer) {
       currentResizer.remove();
@@ -105,6 +104,8 @@
    */
   var uploadMessage = document.querySelector('.upload-message');
 
+  validateForm();
+  setUploadFilterDefault();
   /**
    * @param {Action} action
    * @param {string=} message
@@ -277,12 +278,15 @@
     switch (filter) {
       case 'none':
         document.getElementById('upload-filter-none').checked = true;
+        filterImage.className = 'filter-image-preview ' + 'filter-none';
         break;
       case 'sepia':
         document.getElementById('upload-filter-sepia').checked = true;
+        filterImage.className = 'filter-image-preview ' + 'filter-sepia';
         break;
       case 'chrome':
         document.getElementById('upload-filter-chrome').checked = true;
+        filterImage.className = 'filter-image-preview ' + 'filter-chrome';
         break;
     }
   }
