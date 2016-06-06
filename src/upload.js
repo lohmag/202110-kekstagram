@@ -104,8 +104,6 @@
    */
   var uploadMessage = document.querySelector('.upload-message');
 
-  validateForm();
-  setUploadFilterDefault();
   /**
    * @param {Action} action
    * @param {string=} message
@@ -317,4 +315,6 @@
 
   cleanupResizer();
   updateBackground();
+  validateForm();
+  setUploadFilterDefault();
 })();
