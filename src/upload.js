@@ -22,7 +22,7 @@
     UPLOADING: 1,
     CUSTOM: 2
   };
-
+  var cookies = require('browser-cookies');
   /**
    * Регулярное выражение, проверяющее тип загружаемого файла. Составляется
    * из ключей FileType.
@@ -45,6 +45,7 @@
    * Удаляет текущий объект {@link Resizer}, чтобы создать новый с другим
    * изображением.
    */
+
   function cleanupResizer() {
     if (currentResizer) {
       currentResizer.remove();
@@ -132,6 +133,44 @@
     uploadMessage.classList.add('invisible');
   }
 
+  function validateForm() {
+    var x = document.querySelector('#resize-x');
+    var y = document.querySelector('#resize-y');
+    var side = document.querySelector('#resize-size');
+
+    x.min = 0;
+    y.min = 0;
+    side.min = 0;
+
+    x.oninput = function() {
+      setSideConstraint(x, y, side);
+    };
+    y.oninput = function() {
+      setSideConstraint(x, y, side);
+    };
+    side.oninput = function() {
+      setSideConstraint(x, y, side);
+    };
+    var setSideConstraint = function(left, top, s) {
+      if (left.valueAsNumber + side.valueAsNumber > currentResizer._image.naturalWidth || top.valueAsNumber + side.valueAsNumber > currentResizer._image.naturalHeight) {
+        document.querySelector('#resize-fwd').className += ' disabled';
+        left.max = currentResizer._image.naturalWidth - side.valueAsNumber;
+        left.setCustomValidity = 'Максимальное значение ' + left.max;
+        top.max = currentResizer._image.naturalHeight - side.valueAsNumber;
+        top.setCustomValidity = 'Максимальное значение ' + top.max;
+        if (left.valueAsNumber > top.valueAsNumber) {
+          s.max = currentResizer._image.naturalWidth - left.valueAsNumber;
+        } else {
+          s.max = currentResizer._image.naturalHeight - top.valueAsNumber;
+        }
+        s.setCustomValidity = 'Максимальное значение ' + s.max;
+        return true;
+      } else {
+        document.querySelector('#resize-fwd').className = document.querySelector('#resize-fwd').className.replace(/\sdisabled/g, '');
+        return false;
+      }
+    };
+  }
   /**
    * Обработчик изменения изображения в форме загрузки. Если загруженный
    * файл является изображением, считывается исходник картинки, создается
@@ -232,6 +271,23 @@
    * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
    * выбранному значению в форме.
    */
+  function setUploadFilterDefault() {
+    var filter = cookies.get('filter') || 'none';
+    switch (filter) {
+      case 'none':
+        document.getElementById('upload-filter-none').checked = true;
+        filterImage.className = 'filter-image-preview ' + 'filter-none';
+        break;
+      case 'sepia':
+        document.getElementById('upload-filter-sepia').checked = true;
+        filterImage.className = 'filter-image-preview ' + 'filter-sepia';
+        break;
+      case 'chrome':
+        document.getElementById('upload-filter-chrome').checked = true;
+        filterImage.className = 'filter-image-preview ' + 'filter-chrome';
+        break;
+    }
+  }
   filterForm.onchange = function() {
     if (!filterMap) {
       // Ленивая инициализация. Объект не создается до тех пор, пока
@@ -247,7 +303,10 @@
     var selectedFilter = [].filter.call(filterForm['upload-filter'], function(item) {
       return item.checked;
     })[0].value;
-
+    var today = new Date();
+    var birthday = new Date(today.getFullYear(), 1, 1);
+    var endDay = new Date(Date.now() + today.getTime() - birthday.getTime());
+    cookies.set('filter', selectedFilter, {expires: endDay});
     // Класс перезаписывается, а не обновляется через classList потому что нужно
     // убрать предыдущий примененный класс. Для этого нужно или запоминать его
     // состояние или просто перезаписывать.
@@ -256,4 +315,6 @@
 
   cleanupResizer();
   updateBackground();
+  validateForm();
+  setUploadFilterDefault();
 })();
