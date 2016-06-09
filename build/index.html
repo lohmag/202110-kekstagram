@@ -92,13 +92,13 @@
   var jsonpUrl = '//up.htmlacademy.ru/assets/js_intensive/jsonp/pictures.js';
   var __picturesLoadCallback = function(data) {
     pictures = data;
-  }
+  };
 //Что должна быть за функция по доп заданию я вообще не понял, такая тоже кстати не работает, непонятно почему.
   var __jsonpGetFunction = function(Url) {
     var script_tag = document.createElement("script");
     script_tag.src = Url;
     document.body.appendChild(script_tag);
-  }
+  };
   __jsonpGetFunction(jsonpUrl);
 </script>
 <script src='//up.htmlacademy.ru/assets/js_intensive/jsonp/pictures.js'></script>

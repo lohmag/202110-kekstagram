@@ -19,12 +19,12 @@ var getPictureClone = function(data, container) {
   var image = new Image(182, 182);
   image.onerror = function() {
     clone.classList.add('picture-load-failure');
-  }
+  };
   image.src = data.url;
   clone.replaceChild(image, clone.querySelector('img'));
   container.appendChild(clone);
   return clone;
-}
+};
 window.pictures.forEach(function(picture) {
   getPictureClone(picture, pictureContainer);
-})
+});
