@@ -31,6 +31,7 @@ var getPictureClone = function(data, container) {
 var getPictures = function(callback) {
   var pictureContainer = document.querySelector('.pictures');
   var pictures;
+  pictureContainer.innerHTML = '';
   var xhr = new XMLHttpRequest();
   xhr.open('GET', AJAX_SERVER_URL);
   xhr.loadstart = function() {
@@ -62,27 +63,26 @@ var renderPictures = function(pictures) {
   });
 };
 
-var setFilters = function(filters, pictures) {
+var setFilters = function(filter, pictures) {
   var picturesDefault = pictures.slice(0);
-  filters.classList.remove('hidden');
+  filter.classList.remove('hidden');
   var filtersRadio = document.getElementsByName('filter');
   for (var i = 0; i < filtersRadio.length; i++) {
     if (filtersRadio[i].type === 'radio' && filtersRadio[i].checked) {
       switch (filtersRadio[i].id) {
         case 'filter-popular':
           return picturesDefault;
-          break;
         case 'filter-new':
-          var picturesForLast4Days =  pictures.filter(function(picture) {
+          var picturesForLast4Days = pictures.filter(function(picture) {
             var FourDayBefore = Date.now() - 345600000;
             var timestamp = new Date(picture.date);
             var difference = timestamp.getTime() - FourDayBefore;
-            return difference >=0 && difference;
+            return difference >= 0 && difference;
           });
           picturesForLast4Days.sort(function(a, b) {
-            var timestamp_1 = new Date(a.date);
-            var timestamp_2 = new Date(b.date);
-            return timestamp_2.getTime() - timestamp_1.getTime();
+            var timestamp1 = new Date(a.date);
+            var timestamp2 = new Date(b.date);
+            return timestamp2.getTime() - timestamp1.getTime();
           });
           return picturesForLast4Days;
         case 'filter-discussed':
@@ -90,21 +90,21 @@ var setFilters = function(filters, pictures) {
             return b.comments - a.comments;
           });
           return pictures;
-          break;
       }
     }
   }
+  return 1;
 };
 
 var changeFilters = function() {
   var filtersRadio = document.getElementsByName('filter');
   for (var i = 0; i < filtersRadio.length; i++) {
-    filtersRadio[i].onchange = console.log(filtersRadio[i]);
+    filtersRadio[i].onclick = function() {
+      this.checked = true;
+      getPictures(renderPictures);
+    };
   }
 };
 
-var filtersRadio1 = document.getElementById('filter-new');
-filtersRadio1.onchange = console.log(filtersRadio1);
 changeFilters();
-
 getPictures(renderPictures);
