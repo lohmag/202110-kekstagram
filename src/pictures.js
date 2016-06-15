@@ -85,7 +85,7 @@ var renderPictures = function(pictures) {
 };
 
 var setFilters = function(filter, pictures) {
-  var label
+  var label;
   var picturesDefault = pictures.slice(0);
   filter.classList.remove('hidden');
   var filtersRadio = document.getElementsByName('filter');
