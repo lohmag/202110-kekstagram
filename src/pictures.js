@@ -86,16 +86,20 @@ var renderPictures = function(pictures) {
 
 var setFilters = function(filter, pictures) {
   var label;
+  var returnArray;
   var picturesDefault = pictures.slice(0);
   filter.classList.remove('hidden');
   var filtersRadio = document.getElementsByName('filter');
   for (var i = 0; i < filtersRadio.length; i++) {
-    if (filtersRadio[i].type === 'radio' && filtersRadio[i].checked) {
+    if (filtersRadio[i].type === 'radio') {
       switch (filtersRadio[i].id) {
         case 'filter-popular':
           label = document.querySelector('#filter-popular ~ label');
           label.innerHTML = 'Популярные (' + picturesDefault.length + ')';
-          return picturesDefault;
+          if (filtersRadio[i].checked) {
+            returnArray = picturesDefault;
+          }
+          break;
         case 'filter-new':
           var picturesForLast4Days = pictures.filter(function(picture) {
             var FourDayBefore = Date.now() - 345600000;
@@ -110,18 +114,24 @@ var setFilters = function(filter, pictures) {
           });
           label = document.querySelector('#filter-new ~ label');
           label.innerHTML = 'Новые (' + picturesForLast4Days.length + ')';
-          return picturesForLast4Days;
+          if (filtersRadio[i].checked) {
+            returnArray = picturesForLast4Days;
+          }
+          break;
         case 'filter-discussed':
           var picturesDiscussed = pictures.sort(function(a, b) {
             return b.comments - a.comments;
           });
           label = document.querySelector('#filter-discussed ~ label');
           label.innerHTML = 'Обсуждаемые (' + picturesDiscussed.length + ')';
-          return picturesDiscussed;
+          if (filtersRadio[i].checked) {
+            returnArray = picturesDiscussed;
+          }
+          break;
       }
     }
   }
-  return 1;
+  return returnArray;
 };
 
 var changeFilters = function() {
