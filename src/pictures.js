@@ -85,6 +85,7 @@ var renderPictures = function(pictures) {
 };
 
 var setFilters = function(filter, pictures) {
+  var label
   var picturesDefault = pictures.slice(0);
   filter.classList.remove('hidden');
   var filtersRadio = document.getElementsByName('filter');
@@ -92,8 +93,8 @@ var setFilters = function(filter, pictures) {
     if (filtersRadio[i].type === 'radio' && filtersRadio[i].checked) {
       switch (filtersRadio[i].id) {
         case 'filter-popular':
-          var label = document.querySelector('#filter-popular ~ label');
-           label.innerHTML = 'Популярные (' + picturesDefault.length + ')';
+          label = document.querySelector('#filter-popular ~ label');
+          label.innerHTML = 'Популярные (' + picturesDefault.length + ')';
           return picturesDefault;
         case 'filter-new':
           var picturesForLast4Days = pictures.filter(function(picture) {
@@ -107,14 +108,14 @@ var setFilters = function(filter, pictures) {
             var timestamp2 = new Date(b.date);
             return timestamp2.getTime() - timestamp1.getTime();
           });
-          var label = document.querySelector('#filter-new ~ label');
+          label = document.querySelector('#filter-new ~ label');
           label.innerHTML = 'Новые (' + picturesForLast4Days.length + ')';
           return picturesForLast4Days;
         case 'filter-discussed':
           var picturesDiscussed = pictures.sort(function(a, b) {
             return b.comments - a.comments;
           });
-          var label = document.querySelector('#filter-discussed ~ label');
+          label = document.querySelector('#filter-discussed ~ label');
           label.innerHTML = 'Обсуждаемые (' + picturesDiscussed.length + ')';
           return picturesDiscussed;
       }
