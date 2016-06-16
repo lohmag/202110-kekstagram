@@ -8,16 +8,16 @@
 </head>
 <body>
 
-<form class="filters hidden" action="index.html" method="get">
-  <input type="radio" id="filter-popular" class="filters-radio" name="filter" value="popular" checked>
-  <label for="filter-popular" class="filters-item">Популярные</label>
+  <form class="filters" action="index.html" method="get">
+    <input type="radio" id="filter-popular" class="filters-radio" name="filter" value="popular">
+    <label for="filter-popular" class="filters-item">Популярные</label>
 
-  <input type="radio" id="filter-new" class="filters-radio" name="filter" value="new">
-  <label for="filter-new" class="filters-item">Новые</label>
+    <input type="radio" id="filter-new" class="filters-radio" name="filter" value="new" checked>
+    <label for="filter-new" class="filters-item">Новые</label>
 
-  <input type="radio" id="filter-discussed" class="filters-radio" name="filter" value="discussed">
-  <label for="filter-discussed" class="filters-item">Обсуждаемые</label>
-</form>
+    <input type="radio" id="filter-discussed" class="filters-radio" name="filter" value="discussed">
+    <label for="filter-discussed" class="filters-item">Обсуждаемые</label>
+  </form>
 
 <div class="upload">
   <form class="upload-form upload-image" id="upload-select-image" method="post" enctype="multipart/form-data">
@@ -87,21 +87,6 @@
     </span>
   </a>
 </template>
-<script>
-  var pictures;
-  var jsonpUrl = '//up.htmlacademy.ru/assets/js_intensive/jsonp/pictures.js';
-  var __picturesLoadCallback = function(data) {
-    pictures = data;
-  };
-//Что должна быть за функция по доп заданию я вообще не понял, такая тоже кстати не работает, непонятно почему.
-  var __jsonpGetFunction = function(Url) {
-    var script_tag = document.createElement("script");
-    script_tag.src = Url;
-    document.body.appendChild(script_tag);
-  };
-  __jsonpGetFunction(jsonpUrl);
-</script>
-<script src='//up.htmlacademy.ru/assets/js_intensive/jsonp/pictures.js'></script>
 <script src="js/main.js"></script>
 </body>
 </html>
