@@ -6,6 +6,14 @@
 var AJAX_SERVER_URL = 'https://o0.github.io/assets/json/pictures.json';
 var filters = document.querySelector('.filters');
 filters.classList.add('hidden');
+/** @constant {number} */
+var PAGE_SIZE = 12;
+/** @type {number} */
+var pageNumber = 0;
+/** @type {Array.<Object>} */
+var pictures = [];
+/** @type {Array.<Object>} */
+var filteredPictures = [];
 
 var getPictureClone = function(data, container) {
   var pictureClone;
@@ -46,7 +54,6 @@ var emptyPictures = function(container) {
 
 var getPictures = function(callback) {
   var pictureContainer = document.querySelector('.pictures');
-  var pictures;
   pictureContainer.innerHTML = '';
   var xhr = new XMLHttpRequest();
   xhr.open('GET', AJAX_SERVER_URL);
@@ -58,8 +65,8 @@ var getPictures = function(callback) {
     var requestObj = evt.target;
     var response = requestObj.response;
     pictures = JSON.parse(response);
-    pictures = setFilters(filters, pictures);
-    callback(pictures);
+    filteredPictures = setFilters(filters, pictures);
+    callback(filteredPictures, pageNumber);
   };
   xhr.error = function() {
     pictureContainer.classList.remove('pictures-loading');
@@ -73,10 +80,34 @@ var getPictures = function(callback) {
   xhr.send();
 };
 
-var renderPictures = function(pictures) {
+var isBottomReached = function() {
+  var GAP = 100;
+  var footerElement = document.querySelector('footer');
+  var footerPosition = footerElement.getBoundingClientRect();
+  return footerPosition.top - window.innerHeight - 100 <= 0;
+};
+
+var isNextPageAvailable = function(pictures, page, pageSize) {
+  return page < Math.floor(pictures.length / pageSize);
+};
+
+var setScrollEnabled = function() {
+  window.addEventListener('scroll', function(evt) {
+    console.log('scroll event');
+    if (isBottomReached() && isNextPageAvailable(pictures, pageNumber, PAGE_SIZE)) {
+      pageNumber++;
+      renderPictures(filteredPictures, pageNumber);
+    }
+  });
+};
+setScrollEnabled();
+
+var renderPictures = function(pictures, page) {
   var pictureContainer = document.querySelector('.pictures');
+  var from = page * PAGE_SIZE;
+  var to = from + PAGE_SIZE;
   if (typeof pictures !== 'undefined' && pictures.length > 0) {
-    pictures.forEach(function(picture) {
+    pictures.slice(from, to).forEach(function(picture) {
       getPictureClone(picture, pictureContainer);
     });
   } else {
@@ -87,6 +118,7 @@ var renderPictures = function(pictures) {
 var setFilters = function(filter, pictures) {
   var label;
   var returnArray;
+  pageNumber = 0;
   var picturesDefault = pictures.slice(0);
   filter.classList.remove('hidden');
   var filtersRadio = document.getElementsByName('filter');
