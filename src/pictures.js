@@ -7,7 +7,7 @@ var AJAX_SERVER_URL = 'https://o0.github.io/assets/json/pictures.json';
 var filters = document.querySelector('.filters');
 filters.classList.add('hidden');
 /** @constant {number} */
-var PAGE_SIZE = 12;
+var PICTURE_VOLUME = 12;
 /** @type {number} */
 var pageNumber = 0;
 /** @type {Array.<Object>} */
@@ -94,7 +94,7 @@ var isNextPageAvailable = function(pictures, page, pageSize) {
 var setScrollEnabled = function() {
   window.addEventListener('scroll', function(evt) {
     console.log('scroll event');
-    if (isBottomReached() && isNextPageAvailable(pictures, pageNumber, PAGE_SIZE)) {
+    if (isBottomReached() && isNextPageAvailable(pictures, pageNumber, PICTURE_VOLUME)) {
       pageNumber++;
       renderPictures(filteredPictures, pageNumber);
     }
@@ -102,10 +102,15 @@ var setScrollEnabled = function() {
 };
 setScrollEnabled();
 
+var setPictureVolume = function() {
+  var vol = Math.ceil((window.innerHeight / 196 - 3) * 7 + 12);
+  vol < 12 ? PICTURE_VOLUME = 12 : PICTURE_VOLUME = vol;
+};
+
 var renderPictures = function(pictures, page) {
   var pictureContainer = document.querySelector('.pictures');
-  var from = page * PAGE_SIZE;
-  var to = from + PAGE_SIZE;
+  var from = page * PICTURE_VOLUME;
+  var to = from + PICTURE_VOLUME;
   if (typeof pictures !== 'undefined' && pictures.length > 0) {
     pictures.slice(from, to).forEach(function(picture) {
       getPictureClone(picture, pictureContainer);
@@ -175,6 +180,6 @@ var changeFilters = function() {
     };
   }
 };
-
+setPictureVolume();
 changeFilters();
 getPictures(renderPictures);
