@@ -14,6 +14,8 @@ var pageNumber = 0;
 var pictures = [];
 /** @type {Array.<Object>} */
 var filteredPictures = [];
+/** @type {number} */
+var THROTTLE_DELAY = 1000;
 
 var getPictureClone = function(data, container) {
   var pictureClone;
@@ -78,6 +80,7 @@ var getPictures = function(callback) {
     pictureContainer.classList.add('pictures-failure');
   };
   xhr.send();
+  setScrollEnabled();
 };
 
 var isBottomReached = function() {
@@ -92,15 +95,18 @@ var isNextPageAvailable = function(pictures, page, pageSize) {
 };
 
 var setScrollEnabled = function() {
+  var lastCall = Date.now();
+
   window.addEventListener('scroll', function(evt) {
-    console.log('scroll event');
-    if (isBottomReached() && isNextPageAvailable(pictures, pageNumber, PICTURE_VOLUME)) {
-      pageNumber++;
-      renderPictures(filteredPictures, pageNumber);
+    if (Date.now() - lastCall >= THROTTLE_DELAY) {
+      console.log('scroll event');
+      if (isBottomReached() && isNextPageAvailable(pictures, pageNumber, PICTURE_VOLUME)) {
+        pageNumber++;
+        renderPictures(filteredPictures, pageNumber);
+      }
     }
   });
 };
-setScrollEnabled();
 
 var setPictureVolume = function() {
   var vol = Math.ceil((window.innerHeight / 196 - 3) * 7 + 12);
@@ -180,6 +186,7 @@ var changeFilters = function() {
     };
   }
 };
+
 setPictureVolume();
 changeFilters();
 getPictures(renderPictures);
