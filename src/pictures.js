@@ -26,21 +26,26 @@ var getPictureClone = function(data, container) {
     pictureClone = templatePicture.querySelector('.picture');
   }
   var clone = pictureClone.cloneNode(true);
+  var imgTag = clone.querySelector('img');
   clone.querySelector('.picture-comments').textContent = data.comments;
   clone.querySelector('.picture-likes').textContent = data.likes;
-  var image = new Image(182, 182);
+  var image = new Image(imgTag.Width, imgTag.Height);
   image.onerror = function() {
     clone.classList.add('picture-load-failure');
   };
   image.src = data.url;
-  clone.replaceChild(image, clone.querySelector('img'));
+  clone.replaceChild(image, imgTag);
   container.appendChild(clone);
   return clone;
 };
 
+var selectTemplate = function() {
+   return document.querySelector('#picture-template');
+};
+
 var emptyPictures = function(container) {
   var pictureClone;
-  var templatePicture = document.querySelector('#picture-template');
+  var templatePicture = selectTemplate();
   if ('content' in templatePicture) {
     pictureClone = templatePicture.content.querySelector('.picture');
   } else {
@@ -109,7 +114,14 @@ var setScrollEnabled = function() {
 };
 
 var setPictureVolume = function() {
-  var vol = Math.ceil((window.innerHeight / 196 - 3) * 7 + 12);
+  var imgClone;
+  var templatePicture = selectTemplate();
+  if ('content' in templatePicture) {
+    imgClone = templatePicture.content.querySelector('img');
+  } else {
+    imgClone = templatePicture.querySelector('img');
+  }
+  var vol = Math.ceil((window.innerHeight / imgClone.height - 3) * 7 + 12);
   vol < 12 ? PICTURE_VOLUME = 12 : PICTURE_VOLUME = vol;
 };
 
@@ -178,14 +190,15 @@ var setFilters = function(filter, pictures) {
 };
 
 var changeFilters = function() {
-  var filtersRadio = document.getElementsByName('filter');
-  for (var i = 0; i < filtersRadio.length; i++) {
-    filtersRadio[i].onclick = function() {
-      this.checked = true;
+  //var filtersRadio = document.getElementsByName('filter');
+  filters.addEventListener('click', function(evt) {
+    if (evt.target.classList.contains('filters-radio')) {
+      evt.target.checked = true;
       getPictures(renderPictures);
-    };
-  }
+    }
+  })
 };
+
 
 setPictureVolume();
 changeFilters();
