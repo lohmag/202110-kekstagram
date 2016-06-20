@@ -203,7 +203,6 @@ var changeFilters = function() {
   });
 };
 
-
 setPictureVolume();
 changeFilters();
 getPictures(renderPictures);
