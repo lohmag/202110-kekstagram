@@ -122,7 +122,11 @@ var setPictureVolume = function() {
     imgClone = templatePicture.querySelector('img');
   }
   var vol = Math.ceil((window.innerHeight / imgClone.height - 3) * 7 + 12);
-  vol < 12 ? pictureVolume = 12 : pictureVolume = vol;
+  if (vol < 12) {
+    pictureVolume = 12;
+  } else {
+    pictureVolume = vol;
+  }
 };
 
 var renderPictures = function(picturesy, page) {
