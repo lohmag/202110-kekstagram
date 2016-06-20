@@ -92,17 +92,17 @@ var isBottomReached = function() {
   var GAP = 100;
   var footerElement = document.querySelector('footer');
   var footerPosition = footerElement.getBoundingClientRect();
-  return footerPosition.top - window.innerHeight - 100 <= 0;
+  return footerPosition.top - window.innerHeight - GAP <= 0;
 };
 
-var isNextPageAvailable = function(pictures, page, pageSize) {
-  return page < Math.floor(pictures.length / pageSize);
+var isNextPageAvailable = function(picturesx, page, pageSize) {
+  return page < Math.floor(picturesx.length / pageSize);
 };
 
 var setScrollEnabled = function() {
   var lastCall = Date.now();
 
-  window.addEventListener('scroll', function(evt) {
+  window.addEventListener('scroll', function() {
     if (Date.now() - lastCall >= THROTTLE_DELAY) {
       console.log('scroll event');
       if (isBottomReached() && isNextPageAvailable(pictures, pageNumber, pictureVolume)) {
@@ -125,12 +125,12 @@ var setPictureVolume = function() {
   vol < 12 ? pictureVolume = 12 : pictureVolume = vol;
 };
 
-var renderPictures = function(pictures, page) {
+var renderPictures = function(picturesy, page) {
   var pictureContainer = document.querySelector('.pictures');
   var from = page * pictureVolume;
   var to = from + pictureVolume;
-  if (typeof pictures !== 'undefined' && pictures.length > 0) {
-    pictures.slice(from, to).forEach(function(picture) {
+  if (typeof picturesy !== 'undefined' && picturesy.length > 0) {
+    picturesy.slice(from, to).forEach(function(picture) {
       getPictureClone(picture, pictureContainer);
     });
   } else {
@@ -138,11 +138,11 @@ var renderPictures = function(pictures, page) {
   }
 };
 
-var setFilters = function(filter, pictures) {
+var setFilters = function(filter, picturesz) {
   var label;
   var returnArray;
   pageNumber = 0;
-  var picturesDefault = pictures.slice(0);
+  var picturesDefault = picturesz.slice(0);
   filter.classList.remove('hidden');
   var filtersRadio = document.getElementsByName('filter');
   for (var i = 0; i < filtersRadio.length; i++) {
@@ -156,7 +156,7 @@ var setFilters = function(filter, pictures) {
           }
           break;
         case 'filter-new':
-          var picturesForLast4Days = pictures.filter(function(picture) {
+          var picturesForLast4Days = picturesz.filter(function(picture) {
             var FourDayBefore = Date.now() - 345600000;
             var timestamp = new Date(picture.date);
             var difference = timestamp.getTime() - FourDayBefore;
@@ -174,7 +174,7 @@ var setFilters = function(filter, pictures) {
           }
           break;
         case 'filter-discussed':
-          var picturesDiscussed = pictures.sort(function(a, b) {
+          var picturesDiscussed = picturesz.sort(function(a, b) {
             return b.comments - a.comments;
           });
           label = document.querySelector('#filter-discussed ~ label');
@@ -196,7 +196,7 @@ var changeFilters = function() {
       evt.target.checked = true;
       getPictures(renderPictures);
     }
-  })
+  });
 };
 
 
