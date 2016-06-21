@@ -162,12 +162,13 @@
     });
 
     var setSideConstraint = function(left, top, s) {
-      if (left.valueAsNumber + side.valueAsNumber > currentResizer._image.naturalWidth || top.valueAsNumber + side.valueAsNumber > currentResizer._image.naturalHeight) {
+      if (left.valueAsNumber + s.valueAsNumber > currentResizer._image.naturalWidth || top.valueAsNumber + s.valueAsNumber > currentResizer._image.naturalHeight) {
         document.querySelector('#resize-fwd').className += ' disabled';
-        left.max = currentResizer._image.naturalWidth - side.valueAsNumber;
+        left.max = currentResizer._image.naturalWidth - s.valueAsNumber;
         left.setCustomValidity = 'Максимальное значение ' + left.max;
-        top.max = currentResizer._image.naturalHeight - side.valueAsNumber;
+        top.max = currentResizer._image.naturalHeight - s.valueAsNumber;
         top.setCustomValidity = 'Максимальное значение ' + top.max;
+
         return true;
       } else {
         document.querySelector('#resize-fwd').className = document.querySelector('#resize-fwd').className.replace(/\sdisabled/g, '');
@@ -189,7 +190,7 @@
    * и показывается форма кадрирования.
    * @param {Event} evt
    */
-  uploadForm.addEventListener('change',function(evt) {
+  uploadForm.addEventListener('change', function(evt) {
     var element = evt.target;
     if (element.id === 'upload-file') {
       // Проверка типа загружаемого файла, тип должен быть изображением
