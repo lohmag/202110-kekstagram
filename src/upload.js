@@ -181,7 +181,7 @@
       document.querySelector('#resize-x').value = currentResizer.getConstraint().x;
       document.querySelector('#resize-y').value = currentResizer.getConstraint().y;
       document.querySelector('#resize-size').value = currentResizer.getConstraint().side;
-    })
+    });
   };
   /**
    * Обработчик изменения изображения в форме загрузки. Если загруженный
