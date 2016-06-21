@@ -158,6 +158,7 @@
           setSideConstraint(x, y, side);
           break;
       }
+      currentResizer.setConstraint(x.valueAsNumber, y.valueAsNumber, side.valueAsNumber);
     });
 
     var setSideConstraint = function(left, top, s) {
@@ -176,10 +177,11 @@
   }
   var resizerChange = function() {
     window.addEventListener('resizerchange', function() {
-      var a = window.Resizer;
+      document.querySelector('#resize-x').value = currentResizer.getConstraint().x;
+      document.querySelector('#resize-y').value = currentResizer.getConstraint().y;
+      document.querySelector('#resize-size').value = currentResizer.getConstraint().side;
     })
   };
-  resizerChange();
   /**
    * Обработчик изменения изображения в форме загрузки. Если загруженный
    * файл является изображением, считывается исходник картинки, создается
@@ -327,4 +329,5 @@
   updateBackground();
   validateForm();
   setUploadFilterDefault();
+  resizerChange();
 })();
