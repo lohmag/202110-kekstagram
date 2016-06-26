@@ -178,6 +178,7 @@ var Resizer = require ('./resizer');
       }
     };
   }
+
   var resizerChange = function() {
     window.addEventListener('resizerchange', function() {
       document.querySelector('#resize-x').value = Math.ceil(currentResizer.getConstraint().x);
