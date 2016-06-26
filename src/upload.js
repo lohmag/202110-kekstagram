@@ -7,6 +7,8 @@
 
 'use strict';
 
+var Resizer = require ('./resizer');
+
 (function() {
   /** @enum {string} */
   var FileType = {
@@ -158,15 +160,17 @@
           setSideConstraint(x, y, side);
           break;
       }
+      currentResizer.setConstraint(x.valueAsNumber, y.valueAsNumber, side.valueAsNumber);
     });
 
     var setSideConstraint = function(left, top, s) {
-      if (left.valueAsNumber + side.valueAsNumber > currentResizer._image.naturalWidth || top.valueAsNumber + side.valueAsNumber > currentResizer._image.naturalHeight) {
+      if (left.valueAsNumber + s.valueAsNumber > currentResizer._image.naturalWidth || top.valueAsNumber + s.valueAsNumber > currentResizer._image.naturalHeight) {
         document.querySelector('#resize-fwd').className += ' disabled';
-        left.max = currentResizer._image.naturalWidth - side.valueAsNumber;
+        left.max = currentResizer._image.naturalWidth - s.valueAsNumber;
         left.setCustomValidity = 'Максимальное значение ' + left.max;
-        top.max = currentResizer._image.naturalHeight - side.valueAsNumber;
+        top.max = currentResizer._image.naturalHeight - s.valueAsNumber;
         top.setCustomValidity = 'Максимальное значение ' + top.max;
+
         return true;
       } else {
         document.querySelector('#resize-fwd').className = document.querySelector('#resize-fwd').className.replace(/\sdisabled/g, '');
@@ -176,10 +180,11 @@
   }
   var resizerChange = function() {
     window.addEventListener('resizerchange', function() {
-      var a = window.Resizer;
-    })
+      document.querySelector('#resize-x').value = Math.ceil(currentResizer.getConstraint().x);
+      document.querySelector('#resize-y').value = Math.ceil(currentResizer.getConstraint().y);
+      document.querySelector('#resize-size').value = Math.ceil(currentResizer.getConstraint().side);
+    });
   };
-  resizerChange();
   /**
    * Обработчик изменения изображения в форме загрузки. Если загруженный
    * файл является изображением, считывается исходник картинки, создается
@@ -187,7 +192,7 @@
    * и показывается форма кадрирования.
    * @param {Event} evt
    */
-  uploadForm.addEventListener('change',function(evt) {
+  uploadForm.addEventListener('change', function(evt) {
     var element = evt.target;
     if (element.id === 'upload-file') {
       // Проверка типа загружаемого файла, тип должен быть изображением
@@ -327,4 +332,5 @@
   updateBackground();
   validateForm();
   setUploadFilterDefault();
+  resizerChange();
 })();

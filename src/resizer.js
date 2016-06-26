@@ -350,5 +350,6 @@
     this.y = y;
   };
 
-  window.Resizer = Resizer;
+  //window.Resizer = Resizer;
+  module.exports = Resizer;
 })();
