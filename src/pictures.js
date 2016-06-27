@@ -3,6 +3,8 @@
  */
 'use strict';
 
+var utils = require('./utils');
+
 var AJAX_SERVER_URL = 'https://o0.github.io/assets/json/pictures.json';
 var filters = document.querySelector('.filters');
 filters.classList.add('hidden');
@@ -14,30 +16,9 @@ var pageNumber = 0;
 var pictures = [];
 /** @type {Array.<Object>} */
 var filteredPictures = [];
-/** @type {number} */
-var THROTTLE_DELAY = 1000;
 
-var getPictureClone = function(data, container) {
-  var pictureClone;
-  var templatePicture = document.querySelector('#picture-template');
-  if ('content' in templatePicture) {
-    pictureClone = templatePicture.content.querySelector('.picture');
-  } else {
-    pictureClone = templatePicture.querySelector('.picture');
-  }
-  var clone = pictureClone.cloneNode(true);
-  var imgTag = clone.querySelector('img');
-  clone.querySelector('.picture-comments').textContent = data.comments;
-  clone.querySelector('.picture-likes').textContent = data.likes;
-  var image = new Image(imgTag.Width, imgTag.Height);
-  image.onerror = function() {
-    clone.classList.add('picture-load-failure');
-  };
-  image.src = data.url;
-  clone.replaceChild(image, imgTag);
-  container.appendChild(clone);
-  return clone;
-};
+
+
 
 var selectTemplate = function() {
   return document.querySelector('#picture-template');
@@ -72,8 +53,9 @@ var getPictures = function(callback) {
     var requestObj = evt.target;
     var response = requestObj.response;
     pictures = JSON.parse(response);
-    filteredPictures = setFilters(filters, pictures);
+    filteredPictures = utils.setFilters(filters, pictures);
     callback(filteredPictures, pageNumber);
+    utils.setScrollEnabled(filteredPictures, pageNumber, pictureVolume, renderPictures);
   };
   xhr.error = function() {
     pictureContainer.classList.remove('pictures-loading');
@@ -85,32 +67,8 @@ var getPictures = function(callback) {
     pictureContainer.classList.add('pictures-failure');
   };
   xhr.send();
-  setScrollEnabled();
-};
 
-var isBottomReached = function() {
-  var GAP = 100;
-  var footerElement = document.querySelector('footer');
-  var footerPosition = footerElement.getBoundingClientRect();
-  return footerPosition.top - window.innerHeight - GAP <= 0;
-};
-
-var isNextPageAvailable = function(picturesx, page, pageSize) {
-  return page < Math.floor(picturesx.length / pageSize);
-};
-
-var setScrollEnabled = function() {
-  var lastCall = Date.now();
-
-  window.addEventListener('scroll', function() {
-    if (Date.now() - lastCall >= THROTTLE_DELAY) {
-      console.log('scroll event');
-      if (isBottomReached() && isNextPageAvailable(pictures, pageNumber, pictureVolume)) {
-        pageNumber++;
-        renderPictures(filteredPictures, pageNumber);
-      }
-    }
-  });
+  //setScrollEnabled();
 };
 
 var setPictureVolume = function() {
@@ -127,6 +85,7 @@ var setPictureVolume = function() {
   } else {
     pictureVolume = vol;
   }
+  return pictureVolume;
 };
 
 var renderPictures = function(picturesy, page) {
@@ -135,74 +94,29 @@ var renderPictures = function(picturesy, page) {
   var to = from + pictureVolume;
   if (typeof picturesy !== 'undefined' && picturesy.length > 0) {
     picturesy.slice(from, to).forEach(function(picture) {
-      getPictureClone(picture, pictureContainer);
+      utils.getPictureClone(picture, pictureContainer);
     });
   } else {
     emptyPictures(pictureContainer);
   }
 };
 
-var setFilters = function(filter, picturesz) {
-  var label;
-  var returnArray;
-  pageNumber = 0;
-  var picturesDefault = picturesz.slice(0);
-  filter.classList.remove('hidden');
-  var filtersRadio = document.getElementsByName('filter');
-  for (var i = 0; i < filtersRadio.length; i++) {
-    if (filtersRadio[i].type === 'radio') {
-      switch (filtersRadio[i].id) {
-        case 'filter-popular':
-          label = document.querySelector('#filter-popular ~ label');
-          label.innerHTML = 'Популярные (' + picturesDefault.length + ')';
-          if (filtersRadio[i].checked) {
-            returnArray = picturesDefault;
-          }
-          break;
-        case 'filter-new':
-          var picturesForLast4Days = picturesz.filter(function(picture) {
-            var FourDayBefore = Date.now() - 345600000;
-            var timestamp = new Date(picture.date);
-            var difference = timestamp.getTime() - FourDayBefore;
-            return difference >= 0 && difference;
-          });
-          picturesForLast4Days.sort(function(a, b) {
-            var timestamp1 = new Date(a.date);
-            var timestamp2 = new Date(b.date);
-            return timestamp2.getTime() - timestamp1.getTime();
-          });
-          label = document.querySelector('#filter-new ~ label');
-          label.innerHTML = 'Новые (' + picturesForLast4Days.length + ')';
-          if (filtersRadio[i].checked) {
-            returnArray = picturesForLast4Days;
-          }
-          break;
-        case 'filter-discussed':
-          var picturesDiscussed = picturesz.sort(function(a, b) {
-            return b.comments - a.comments;
-          });
-          label = document.querySelector('#filter-discussed ~ label');
-          label.innerHTML = 'Обсуждаемые (' + picturesDiscussed.length + ')';
-          if (filtersRadio[i].checked) {
-            returnArray = picturesDiscussed;
-          }
-          break;
-      }
-    }
-  }
-  return returnArray;
-};
-
 var changeFilters = function() {
-  //var filtersRadio = document.getElementsByName('filter');
+
   filters.addEventListener('click', function(evt) {
     if (evt.target.classList.contains('filters-radio')) {
+      pageNumber = 0;
       evt.target.checked = true;
       getPictures(renderPictures);
     }
   });
 };
-
-setPictureVolume();
-changeFilters();
-getPictures(renderPictures);
+module.exports = {
+  setPictureVolume: setPictureVolume,
+  changeFilters: changeFilters,
+  getPictures: getPictures,
+  renderPictures: renderPictures
+};
+/*setPictureVolume();
+ changeFilters();
+ getPictures(renderPictures);*/

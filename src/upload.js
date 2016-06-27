@@ -7,6 +7,8 @@
 
 'use strict';
 
+var Resizer = require('./resizer');
+
 (function() {
   /** @enum {string} */
   var FileType = {
@@ -176,11 +178,12 @@
       }
     };
   }
+
   var resizerChange = function() {
     window.addEventListener('resizerchange', function() {
-      document.querySelector('#resize-x').value = currentResizer.getConstraint().x;
-      document.querySelector('#resize-y').value = currentResizer.getConstraint().y;
-      document.querySelector('#resize-size').value = currentResizer.getConstraint().side;
+      document.querySelector('#resize-x').value = Math.ceil(currentResizer.getConstraint().x);
+      document.querySelector('#resize-y').value = Math.ceil(currentResizer.getConstraint().y);
+      document.querySelector('#resize-size').value = Math.ceil(currentResizer.getConstraint().side);
     });
   };
   /**
@@ -325,10 +328,16 @@
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
   });
-
-  cleanupResizer();
-  updateBackground();
-  validateForm();
-  setUploadFilterDefault();
-  resizerChange();
+  module.exports = {
+    cleanupResizer: cleanupResizer,
+    updateBackground: updateBackground,
+    validateForm: validateForm,
+    setUploadFilterDefault: setUploadFilterDefault,
+    resizerChange: resizerChange
+  };
+  /*cleanupResizer();
+   updateBackground();
+   validateForm();
+   setUploadFilterDefault();
+   resizerChange();*/
 })();
