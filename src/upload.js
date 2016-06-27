@@ -328,10 +328,16 @@ var Resizer = require ('./resizer');
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
   });
-
-  cleanupResizer();
+module.exports = {
+  cleanupResizer: cleanupResizer,
+  updateBackground: updateBackground,
+  validateForm: validateForm,
+  setUploadFilterDefault: setUploadFilterDefault,
+  resizerChange: resizerChange
+};
+  /*cleanupResizer();
   updateBackground();
   validateForm();
   setUploadFilterDefault();
-  resizerChange();
+  resizerChange();*/
 })();

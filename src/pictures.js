@@ -56,6 +56,7 @@ var getPictures = function(callback) {
     pictures = JSON.parse(response);
     filteredPictures = utils.setFilters(filters, pictures);
     callback(filteredPictures, pageNumber);
+    utils.setScrollEnabled(filteredPictures, pageNumber, pictureVolume, renderPictures);
   };
   xhr.error = function() {
     pictureContainer.classList.remove('pictures-loading');
@@ -67,7 +68,7 @@ var getPictures = function(callback) {
     pictureContainer.classList.add('pictures-failure');
   };
   xhr.send();
-  utils.setScrollEnabled(filteredPictures, pageNumber, pictureVolume, renderPictures);
+
   //setScrollEnabled();
 };
 
@@ -111,7 +112,12 @@ var changeFilters = function() {
     }
   });
 };
-
-setPictureVolume();
+module.exports = {
+  setPictureVolume: setPictureVolume,
+  changeFilters: changeFilters,
+  getPictures: getPictures,
+  renderPictures: renderPictures
+};
+/*setPictureVolume();
 changeFilters();
-getPictures(renderPictures);
+getPictures(renderPictures);*/
