@@ -3,7 +3,7 @@
  */
 'use strict';
 
-var utils = require ('./utils');
+var utils = require('./utils');
 
 var AJAX_SERVER_URL = 'https://o0.github.io/assets/json/pictures.json';
 var filters = document.querySelector('.filters');
@@ -16,8 +16,7 @@ var pageNumber = 0;
 var pictures = [];
 /** @type {Array.<Object>} */
 var filteredPictures = [];
-/** @type {number} */
-var THROTTLE_DELAY = 1000;
+
 
 
 

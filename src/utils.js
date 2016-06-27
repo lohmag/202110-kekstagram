@@ -4,6 +4,7 @@
 
 'use strict';
 
+/** @type {number} */
 var THROTTLE_DELAY = 1000;
 
 
