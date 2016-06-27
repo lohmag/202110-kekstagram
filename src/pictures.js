@@ -3,7 +3,7 @@
  */
 'use strict';
 
-var utils = require ('./utils');
+var utils = require('./utils');
 
 var AJAX_SERVER_URL = 'https://o0.github.io/assets/json/pictures.json';
 var filters = document.querySelector('.filters');
@@ -16,8 +16,7 @@ var pageNumber = 0;
 var pictures = [];
 /** @type {Array.<Object>} */
 var filteredPictures = [];
-/** @type {number} */
-var THROTTLE_DELAY = 1000;
+
 
 
 
@@ -56,6 +55,7 @@ var getPictures = function(callback) {
     pictures = JSON.parse(response);
     filteredPictures = utils.setFilters(filters, pictures);
     callback(filteredPictures, pageNumber);
+    utils.setScrollEnabled(filteredPictures, pageNumber, pictureVolume, renderPictures);
   };
   xhr.error = function() {
     pictureContainer.classList.remove('pictures-loading');
@@ -67,7 +67,7 @@ var getPictures = function(callback) {
     pictureContainer.classList.add('pictures-failure');
   };
   xhr.send();
-  utils.setScrollEnabled(filteredPictures, pageNumber, pictureVolume, renderPictures);
+
   //setScrollEnabled();
 };
 
@@ -111,7 +111,12 @@ var changeFilters = function() {
     }
   });
 };
-
-setPictureVolume();
-changeFilters();
-getPictures(renderPictures);
+module.exports = {
+  setPictureVolume: setPictureVolume,
+  changeFilters: changeFilters,
+  getPictures: getPictures,
+  renderPictures: renderPictures
+};
+/*setPictureVolume();
+ changeFilters();
+ getPictures(renderPictures);*/

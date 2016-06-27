@@ -7,7 +7,7 @@
 
 'use strict';
 
-var Resizer = require ('./resizer');
+var Resizer = require('./resizer');
 
 (function() {
   /** @enum {string} */
@@ -328,10 +328,16 @@ var Resizer = require ('./resizer');
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
   });
-
-  cleanupResizer();
-  updateBackground();
-  validateForm();
-  setUploadFilterDefault();
-  resizerChange();
+  module.exports = {
+    cleanupResizer: cleanupResizer,
+    updateBackground: updateBackground,
+    validateForm: validateForm,
+    setUploadFilterDefault: setUploadFilterDefault,
+    resizerChange: resizerChange
+  };
+  /*cleanupResizer();
+   updateBackground();
+   validateForm();
+   setUploadFilterDefault();
+   resizerChange();*/
 })();
