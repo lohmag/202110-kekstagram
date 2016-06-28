@@ -323,6 +323,7 @@
     }
   };
 
+
   /**
    * Вспомогательный тип, описывающий квадрат.
    * @constructor
@@ -349,5 +350,6 @@
     this.y = y;
   };
 
-  window.Resizer = Resizer;
+  //window.Resizer = Resizer;
+  module.exports = Resizer;
 })();

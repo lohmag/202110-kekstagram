@@ -540,7 +540,7 @@ input[type=radio]:checked + .upload-filter-label {
   background: #ffffff;
 }
 
-.gallery-overlay-image[src=""] {
+.gallery-overlay-image {
   display: block;
   width: 640px;
   height: 640px;
