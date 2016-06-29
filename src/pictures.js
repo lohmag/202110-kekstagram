@@ -183,11 +183,12 @@ var changeFilters = function() {
 
 var openGallery = function() {
   var pictures = document.querySelector('.pictures');
+
   pictures.addEventListener('click', function(evt) {
+    evt.preventDefault();
     for (var i = 0; i < filteredPictures.length; i++) {
-      //alert(evt.target.src.indexOf(filteredPictures[i].url));
       if (!(evt.target.src.indexOf(filteredPictures[i].url) == -1)) {
-        gallery.init(filteredPictures, i);
+        gallery.showGallery(i);
         return true;
       }
     }
@@ -204,4 +205,3 @@ var init = function() {
 module.exports = {
   init: init
 };
-

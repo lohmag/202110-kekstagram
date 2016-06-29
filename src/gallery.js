@@ -17,42 +17,36 @@ var showGallery = function(pictureNumber) {
   imgTag.setAttribute('src', pictures[pictureNumber].url);
   gallery.querySelector('.likes-count').textContent = pictures[pictureNumber].likes;
   gallery.querySelector('.comments-count').textContent = pictures[pictureNumber].comments;
+  window.addEventListener('keyup', _onDocumentKeyDown);
+  gallery.addEventListener('click', _onOverlayClick);
+  gallery.querySelector('.gallery-overlay-image').addEventListener('click', _onPhotoClick);
 };
 
 var _onPhotoClick = function() {
-  gallery.querySelector('.gallery-overlay-image').addEventListener('click', function(evt) {
     startingPicture++;
     if (startingPicture > pictures.length) {
       startingPicture = 0;
     }
     showGallery(startingPicture);
-  })
 };
 
-var _onDocumentKeyDown = function() {
-  window.addEventListener('keyup', function(evt) {
+var _onDocumentKeyDown = function(evt) {
     if (evt.keyCode == '27') {
-      gallery.classList.add('invisible');
+      closeGallery();
     }
-  })
 };
 
-var _onOverlayClick = function() {
-  gallery.addEventListener('click', function(evt) {
-    if (evt.target.classList.contains('gallery-overlay') || evt.target.classList.contains('gallery-overlay-close')) {
-      gallery.classList.add('invisible');
+var _onOverlayClick = function(evt) {
+    if (evt.target.classList.contains('gallery-overlay') || event.target.classList.contains('gallery-overlay-close')) {
+      closeGallery();
     }
-  })
+};
+var closeGallery = function() {
+  gallery.classList.add('invisible');
 };
 
-var init = function(pictures, pictureNumber) {
-  showGallery(pictureNumber);
-  _onPhotoClick();
-  _onDocumentKeyDown();
-  _onOverlayClick();
-};
 
 module.exports = {
-  init: init,
+  showGallery: showGallery,
   saveInputData: saveInputData
 };
