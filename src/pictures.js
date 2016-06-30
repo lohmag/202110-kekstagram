@@ -5,6 +5,7 @@
 
 var utils = require('./utils');
 var gallery = require('./gallery');
+var Picture = require('./modules/addPicture');
 
 var THROTTLE_DELAY = 100;
 var AJAX_SERVER_URL = 'https://o0.github.io/assets/json/pictures.json';
@@ -163,7 +164,7 @@ var renderPictures = function(picturesy, page) {
   var to = from + pictureVolume;
   if (typeof picturesy !== 'undefined' && picturesy.length > 0) {
     picturesy.slice(from, to).forEach(function(picture) {
-      utils.getPictureClone(picture, pictureContainer);
+      new Picture(picture, pictureContainer);
     });
   } else {
     emptyPictures(pictureContainer);
@@ -181,19 +182,7 @@ var changeFilters = function() {
   });
 };
 
-var openGallery = function() {
-  var pictures = document.querySelector('.pictures');
 
-  pictures.addEventListener('click', function(evt) {
-    evt.preventDefault();
-    for (var i = 0; i < filteredPictures.length; i++) {
-      if (!(evt.target.src.indexOf(filteredPictures[i].url) == -1)) {
-        gallery.showGallery(i);
-        return true;
-      }
-    }
-  })
-};
 
 var init = function() {
   setPictureVolume();

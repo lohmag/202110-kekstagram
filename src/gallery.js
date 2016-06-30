@@ -9,14 +9,19 @@ var saveInputData = function(data) {
   pictures = data;
 };
 
-var showGallery = function(pictureNumber) {
-  startingPicture = pictureNumber;
+var showGallery = function(pictureData) {
+  for (var i = 0; i < pictures.length; i++) {
+    if (!(pictureData.url.indexOf(pictures[i].url) == -1)) {
+      startingPicture = i;
+      break;
+    }
+  }
   gallery = document.querySelector('.gallery-overlay');
   gallery.classList.remove('invisible');
   var imgTag = gallery.querySelector('img');
-  imgTag.setAttribute('src', pictures[pictureNumber].url);
-  gallery.querySelector('.likes-count').textContent = pictures[pictureNumber].likes;
-  gallery.querySelector('.comments-count').textContent = pictures[pictureNumber].comments;
+  imgTag.setAttribute('src', pictures[startingPicture].url);
+  gallery.querySelector('.likes-count').textContent = pictures[startingPicture].likes;
+  gallery.querySelector('.comments-count').textContent = pictures[startingPicture].comments;
   window.addEventListener('keyup', _onDocumentKeyDown);
   gallery.addEventListener('click', _onOverlayClick);
   gallery.querySelector('.gallery-overlay-image').addEventListener('click', _onPhotoClick);
@@ -27,7 +32,7 @@ var _onPhotoClick = function() {
     if (startingPicture > pictures.length) {
       startingPicture = 0;
     }
-    showGallery(startingPicture);
+    showGallery(pictures[startingPicture]);
 };
 
 var _onDocumentKeyDown = function(evt) {
