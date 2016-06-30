@@ -19,7 +19,10 @@ var pageNumber = 0;
 var pictures = [];
 /** @type {Array.<Object>} */
 var filteredPictures = [];
-
+/** @type {DOM Element} */
+var pictureContainer = document.querySelector('.pictures');
+/** @type {Array.<Object>} */
+var renderedPictures = [];
 
 
 
@@ -57,9 +60,16 @@ var setScrollEnabled = function(pictures, pageNumber, pictureVolume, callback) {
   });
 };
 
+var clearPictureContainer = function() {
+  renderedPictures.forEach(function(element) {
+    element.remove();
+  });
+  renderedPictures = [];
+};
+
 var getPictures = function(callback) {
-  var pictureContainer = document.querySelector('.pictures');
-  pictureContainer.innerHTML = '';
+ // var pictureContainer = document.querySelector('.pictures');
+  clearPictureContainer();
   var xhr = new XMLHttpRequest();
   xhr.open('GET', AJAX_SERVER_URL);
   xhr.loadstart = function() {
@@ -159,12 +169,11 @@ var setPictureVolume = function() {
 };
 
 var renderPictures = function(picturesy, page) {
-  var pictureContainer = document.querySelector('.pictures');
   var from = page * pictureVolume;
   var to = from + pictureVolume;
   if (typeof picturesy !== 'undefined' && picturesy.length > 0) {
     picturesy.slice(from, to).forEach(function(picture) {
-      new Picture(picture, pictureContainer);
+      renderedPictures.push(new Picture(picture, pictureContainer));
     });
   } else {
     emptyPictures(pictureContainer);
@@ -172,7 +181,6 @@ var renderPictures = function(picturesy, page) {
 };
 
 var changeFilters = function() {
-
   filters.addEventListener('click', function(evt) {
     if (evt.target.classList.contains('filters-radio')) {
       pageNumber = 0;
