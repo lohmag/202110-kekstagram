@@ -4,7 +4,7 @@
 'use strict';
 
 var utils = require('./utils');
-var gallery = require('./gallery');
+var Gallery = require('./gallery');
 var Picture = require('./modules/addPicture');
 
 var THROTTLE_DELAY = 100;
@@ -83,7 +83,7 @@ var getPictures = function(callback) {
     filteredPictures = setFilters(filters, pictures);
     callback(filteredPictures, pageNumber);
     setScrollEnabled(filteredPictures, pageNumber, pictureVolume, callback);
-    gallery.saveInputData(filteredPictures);
+   window.galleryObject = new Gallery(filteredPictures);
   };
   xhr.error = function() {
     pictureContainer.classList.remove('pictures-loading');
@@ -95,13 +95,12 @@ var getPictures = function(callback) {
     pictureContainer.classList.add('pictures-failure');
   };
   xhr.send();
-
 };
 
 var setFilters = function(filter, pictures) {
   var label;
   var returnArray;
-  window.pageNumber = 0;
+  pageNumber = 0;
   var picturesDefault = pictures.slice(0);
   filter.classList.remove('hidden');
   var filtersRadio = document.getElementsByName('filter');

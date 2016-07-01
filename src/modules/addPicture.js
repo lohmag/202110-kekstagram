@@ -13,7 +13,7 @@ var Photo = function(data, container) {
 
   this.onClick = function(evt) {
       evt.preventDefault();
-      Gallery.showGallery(self.data);
+      window.galleryObject.showGallery(self.data);
   };
 
   this.remove = function() {
