@@ -4,7 +4,7 @@
 'use strict';
 
 var utils = require('./utils');
-window.Gallery = require('./gallery');
+var Gallery = require('./gallery');
 var Picture = require('./modules/addPicture');
 
 var THROTTLE_DELAY = 100;
@@ -52,7 +52,6 @@ var clearPictureContainer = function() {
 };
 
 var getPictures = function(callback) {
- // var pictureContainer = document.querySelector('.pictures');
   clearPictureContainer();
   var xhr = new XMLHttpRequest();
   xhr.open('GET', AJAX_SERVER_URL);
@@ -67,7 +66,7 @@ var getPictures = function(callback) {
     filteredPictures = setFilters(filters, pictures);
     callback(filteredPictures, pageNumber);
     setScrollEnabled(filteredPictures, pageNumber, pictureVolume, callback);
-    window.Gallery.init(filteredPictures);
+    Gallery.setParams(filteredPictures);
   };
   xhr.error = function() {
     pictureContainer.classList.remove('pictures-loading');
@@ -142,8 +141,6 @@ var setFilters = function(filter, pictures) {
   return returnArray;
 };
 
-
-
 var setPictureVolume = function() {
   var imgClone;
   var templatePicture = selectTemplate();
@@ -166,10 +163,10 @@ var renderPictures = function(picturesy, page) {
   var to = from + pictureVolume;
   if (typeof picturesy !== 'undefined' && picturesy.length > 0) {
     picturesy.slice(from, to).forEach(function(picture) {
-      renderedPictures.push(new Picture(picture, pictureContainer));
+      renderedPictures.push(new Picture.Photo(picture, pictureContainer, Gallery));
     });
   } else {
-    renderedPictures.push(new Picture(null, pictureContainer));
+    renderedPictures.push(new Picture.Empty(pictureContainer));
   }
 };
 

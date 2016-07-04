@@ -2,16 +2,19 @@
 
 
 var Gallery = function() {
-  this.init = function(data) {
-    this.pictures = data;
+
+
     this.startingPicture = 0;
     var self = this;
 
+    this.setParams = function(data) {
+      self.pictures = data;
+    };
+
     this.setHash = function(pictureData) {
-      for (var i = 0; i < this.pictures.length; i++) {
-        if (!(pictureData.url.indexOf(this.pictures[i].url) == -1)) {
-          //self.startingPicture = i;
-          location.hash = this.pictures[i].url;
+      for (var i = 0; i < self.pictures.length; i++) {
+        if (!(pictureData.url.indexOf(self.pictures[i].url) == -1)) {
+          location.hash = self.pictures[i].url;
           break;
         }
       }
@@ -81,6 +84,6 @@ var Gallery = function() {
     };
 
     this._onHashChange();
-  }
-};
+  };
+
 module.exports = new Gallery;

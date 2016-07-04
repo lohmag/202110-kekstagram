@@ -5,30 +5,36 @@
 'use strict';
 
 
-var Photo = function(data, container) {
+var Photo = function(data, container, Gallery) {
   this.data = data;
-  if (!(this.data == null)) {
-    this.element = getPictureClone(this.data);
-    var self = this;
+  this.element = getPictureClone(this.data);
+  var self = this;
 
-    this.onClick = function(evt) {
-      evt.preventDefault();
-      window.Gallery.setHash(self.data);
-    };
+  this.onClick = function(evt) {
+    evt.preventDefault();
+    Gallery.setHash(self.data);
+  };
 
-    this.remove = function() {
-      this.element.removeEventListener('click', this.onClick);
-      this.element.parentNode.removeChild(this.element);
-    };
+  this.remove = function() {
+    this.element.removeEventListener('click', this.onClick);
+    this.element.parentNode.removeChild(this.element);
+  };
 
-    this.element.addEventListener('click', this.onClick);
+  this.element.addEventListener('click', this.onClick);
+  container.appendChild(this.element);
+};
 
-  } else {
-    this.element = emptyPictures();
-    this.remove = function() {
-      this.element.parentNode.removeChild(this.element);
-    };
-  }
+var Empty = function(container) {
+  this.element = emptyPictures();
+
+  this.onClick = function(evt) {
+    evt.preventDefault();
+  };
+
+  this.remove = function() {
+    this.element.parentNode.removeChild(this.element);
+  };
+  this.element.addEventListener('click', this.onClick);
   container.appendChild(this.element);
 };
 
@@ -71,4 +77,7 @@ var emptyPictures = function() {
 var selectTemplate = function() {
   return document.querySelector('#picture-template');
 };
-module.exports = Photo;
+module.exports = {
+  Photo: Photo,
+  Empty: Empty
+};
