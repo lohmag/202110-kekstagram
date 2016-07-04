@@ -4,30 +4,37 @@
 
 'use strict';
 
-var Gallery = require('../gallery.js');
 
 var Photo = function(data, container) {
   this.data = data;
-  this.element = getPictureClone(this.data, container);
-  var self = this;
+  if (!(this.data == null)) {
+    this.element = getPictureClone(this.data);
+    var self = this;
 
-  this.onClick = function(evt) {
+    this.onClick = function(evt) {
       evt.preventDefault();
-      window.galleryObject.showGallery(self.data);
-  };
+      window.Gallery.setHash(self.data);
+    };
 
-  this.remove = function() {
-    this.element.removeEventListener('click', this.onClick);
-    this.element.parentNode.removeChild(this.element);
-  };
+    this.remove = function() {
+      this.element.removeEventListener('click', this.onClick);
+      this.element.parentNode.removeChild(this.element);
+    };
 
-  this.element.addEventListener('click', this.onClick);
+    this.element.addEventListener('click', this.onClick);
+
+  } else {
+    this.element = emptyPictures();
+    this.remove = function() {
+      this.element.parentNode.removeChild(this.element);
+    };
+  }
   container.appendChild(this.element);
 };
 
-var getPictureClone = function(data, container) {
+var getPictureClone = function(data) {
   var pictureClone;
-  var templatePicture = document.querySelector('#picture-template');
+  var templatePicture = selectTemplate();
   if ('content' in templatePicture) {
     pictureClone = templatePicture.content.querySelector('.picture');
   } else {
@@ -46,4 +53,22 @@ var getPictureClone = function(data, container) {
   return clone;
 };
 
+var emptyPictures = function() {
+  var pictureClone;
+  var templatePicture = selectTemplate();
+  if ('content' in templatePicture) {
+    pictureClone = templatePicture.content.querySelector('.picture');
+  } else {
+    pictureClone = templatePicture.querySelector('.picture');
+  }
+  var clone = pictureClone.cloneNode(true);
+  var message = document.createElement('p');
+  message.innerHTML = 'Нет картинок по данному фильтру';
+  clone.replaceChild(message, clone.querySelector('img'));
+  return clone;
+};
+
+var selectTemplate = function() {
+  return document.querySelector('#picture-template');
+};
 module.exports = Photo;
