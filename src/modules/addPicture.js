@@ -8,34 +8,34 @@
 var Photo = function(data, container, Gallery) {
   this.data = data;
   this.element = getPictureClone(this.data);
-  var self = this;
+  this.gallery = Gallery;
 
-  this.onClick = function(evt) {
-    evt.preventDefault();
-    Gallery.setHash(self.data);
-  };
-
-  this.remove = function() {
-    this.element.removeEventListener('click', this.onClick);
-    this.element.parentNode.removeChild(this.element);
-  };
-
-  this.element.addEventListener('click', this.onClick);
+  this.element.addEventListener('click', this.onClick.bind(this));
   container.appendChild(this.element);
+};
+
+Photo.prototype.onClick = function(evt) {
+  evt.preventDefault();
+  this.gallery.setHash(this.data)
+};
+
+Photo.prototype.remove = function() {
+  this.element.removeEventListener('click', this.onClick);
+  this.element.parentNode.removeChild(this.element);
 };
 
 var Empty = function(container) {
   this.element = emptyPictures();
-
-  this.onClick = function(evt) {
-    evt.preventDefault();
-  };
-
-  this.remove = function() {
-    this.element.parentNode.removeChild(this.element);
-  };
-  this.element.addEventListener('click', this.onClick);
+  this.element.addEventListener('click', this.onClick.bind(this));
   container.appendChild(this.element);
+};
+
+Empty.prototype.onClick = function(evt) {
+  evt.preventDefault();
+};
+
+Empty.prototype.remove = function() {
+  this.element.parentNode.removeChild(this.element);
 };
 
 var getPictureClone = function(data) {
