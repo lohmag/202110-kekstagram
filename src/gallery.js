@@ -4,7 +4,7 @@
 var Gallery = function() {
 
   this.startingPicture = 0;
-  var self = this;
+  this.gallery = document.querySelector('.gallery-overlay');
 
   this.setParams = function(data) {
     this.pictures = data;
@@ -29,7 +29,6 @@ var Gallery = function() {
 
   this._fillPicture = function(picture) {
     location.hash = picture.url;
-    this.gallery = document.querySelector('.gallery-overlay');
     this.gallery.classList.remove('invisible');
     this.imgTag = this.gallery.querySelector('img');
     this.imgTag.setAttribute('src', picture.url);
@@ -57,8 +56,8 @@ var Gallery = function() {
   window.addEventListener('hashchange', this._onHashChange.bind(this));
   window.addEventListener('pageshow', this._onHashChange.bind(this));
   window.addEventListener('keyup', this._onDocumentKeyDown.bind(this));
-  document.querySelector('.gallery-overlay').addEventListener('click', this._onOverlayClick.bind(this));
-  document.querySelector('.gallery-overlay').querySelector('.gallery-overlay-image').addEventListener('click', this._onPhotoClick.bind(this));
+  this.gallery.addEventListener('click', this._onOverlayClick.bind(this));
+  this.gallery.querySelector('.gallery-overlay-image').addEventListener('click', this._onPhotoClick.bind(this));
 };
 
 Gallery.prototype.setHash = function(pictureData) {
