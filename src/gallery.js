@@ -35,9 +35,6 @@ var Gallery = function() {
     this.imgTag.setAttribute('src', picture.url);
     this.gallery.querySelector('.likes-count').textContent = picture.likes;
     this.gallery.querySelector('.comments-count').textContent = picture.comments;
-    window.addEventListener('keyup', this._onDocumentKeyDown.bind(this));
-    this.gallery.addEventListener('click', this._onOverlayClick.bind(this));
-    this.gallery.querySelector('.gallery-overlay-image').addEventListener('click', this._onPhotoClick.bind(this));
   };
 
   this.remove = function() {
@@ -47,18 +44,21 @@ var Gallery = function() {
   };
 
   this._onPhotoClick = function() {
-    self.startingPicture++;
-    if (self.startingPicture > self.pictures.length) {
-      self.startingPicture = 0;
+    this.startingPicture++;
+    if (this.startingPicture > this.pictures.length) {
+      this.startingPicture = 0;
     }
-    self.remove();
-    self.showGallery(self.startingPicture);
+    this.remove();
+    this.showGallery(this.startingPicture);
   };
 
 
 
   window.addEventListener('hashchange', this._onHashChange.bind(this));
   window.addEventListener('pageshow', this._onHashChange.bind(this));
+  window.addEventListener('keyup', this._onDocumentKeyDown.bind(this));
+  document.querySelector('.gallery-overlay').addEventListener('click', this._onOverlayClick.bind(this));
+  document.querySelector('.gallery-overlay').querySelector('.gallery-overlay-image').addEventListener('click', this._onPhotoClick.bind(this));
 };
 
 Gallery.prototype.setHash = function(pictureData) {
