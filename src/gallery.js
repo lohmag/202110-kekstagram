@@ -15,7 +15,7 @@ var Gallery = function() {
 
 Gallery.prototype.setHash = function(pictureData) {
   for (var i = 0; i < this.pictures.length; i++) {
-    if (!(pictureData.url.indexOf(this.pictures[i].url) == -1)) {
+    if (!(pictureData.url.indexOf(this.pictures[i].url) === -1)) {
       location.hash = this.pictures[i].url;
       break;
     }
@@ -32,13 +32,13 @@ Gallery.prototype._fillPicture = function(picture) {
 };
 
 Gallery.prototype.showGallery = function(pictureData) {
-  if (typeof pictureData == "number") {
+  if (typeof pictureData === 'number') {
     this.startingPicture = pictureData;
     this._fillPicture(this.pictures[this.startingPicture]);
   }
-  else if (typeof pictureData == "string") {
+  else if (typeof pictureData === 'string') {
     for (var i = 0; i < this.pictures.length; i++) {
-      if (!(this.pictures[i].url.indexOf(pictureData) == -1)) {
+      if (!(this.pictures[i].url.indexOf(pictureData) === -1)) {
         this._fillPicture(this.pictures[i]);
         this.startingPicture = i;
         break;
@@ -66,7 +66,7 @@ Gallery.prototype._onHashChange = function() {
 };
 
 Gallery.prototype._onDocumentKeyDown = function(evt) {
-  if (evt.keyCode == '27') {
+  if (evt.keyCode === '27') {
     location.hash = '';
     this.closeGallery();
   }
