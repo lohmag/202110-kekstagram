@@ -128,8 +128,7 @@ var setFilters = function(filter, pictures) {
 
   filter.classList.remove('hidden');
   var filtersRadio = document.getElementsByName('filter');
-  var fromStorage = localStorage.getItem('lastFilter');
-  if (localStorage.getItem('lastFilter') && setFilterCallValue == 0) {
+  if (localStorage.getItem('lastFilter') && setFilterCallValue === 0) {
     document.querySelector('#' + localStorage.getItem('lastFilter')).checked = true;
   }
   for (var i = 0; i < filtersRadio.length; i++) {

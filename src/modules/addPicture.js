@@ -16,7 +16,7 @@ var Photo = function(data, container, Gallery) {
 
 Photo.prototype.onClick = function(evt) {
   evt.preventDefault();
-  this.gallery.setHash(this.data)
+  this.gallery.setHash(this.data);
 };
 
 Photo.prototype.remove = function() {

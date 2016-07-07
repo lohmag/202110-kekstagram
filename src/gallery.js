@@ -91,4 +91,4 @@ Gallery.prototype.remove = function() {
 };
 
 
-module.exports = new Gallery;
+module.exports = new Gallery();
