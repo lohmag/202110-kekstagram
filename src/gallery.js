@@ -35,8 +35,7 @@ Gallery.prototype.showGallery = function(pictureData) {
   if (typeof pictureData === 'number') {
     this.startingPicture = pictureData;
     this._fillPicture(this.pictures[this.startingPicture]);
-  }
-  else if (typeof pictureData === 'string') {
+  } else if (typeof pictureData === 'string') {
     for (var i = 0; i < this.pictures.length; i++) {
       if (!(this.pictures[i].url.indexOf(pictureData) === -1)) {
         this._fillPicture(this.pictures[i]);
@@ -60,7 +59,8 @@ Gallery.prototype._onPhotoClick = function() {
 };
 
 Gallery.prototype._onHashChange = function() {
-  if (this.found = location.hash.match(/#photos\/(\S+)/)) {
+  this.found = location.hash.match(/#photos\/(\S+)/);
+  if (this.found) {
     this.showGallery(this.found[0].substr(1));
   }
 };

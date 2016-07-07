@@ -7,6 +7,7 @@ var utils = require('./utils');
 var Gallery = require('./gallery');
 var Picture = require('./modules/addPicture');
 
+
 var THROTTLE_DELAY = 100;
 var AJAX_SERVER_URL = 'https://o0.github.io/assets/json/pictures.json';
 var filters = document.querySelector('.filters');
