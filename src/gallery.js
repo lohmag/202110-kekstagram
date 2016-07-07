@@ -6,53 +6,6 @@ var Gallery = function() {
   this.startingPicture = 0;
   this.gallery = document.querySelector('.gallery-overlay');
 
-  this.setParams = function(data) {
-    this.pictures = data;
-  };
-
-  this.showGallery = function(pictureData) {
-    if (typeof pictureData == "number") {
-      this.startingPicture = pictureData;
-      this._fillPicture(this.pictures[this.startingPicture]);
-      this.startingPicture = pictureData;
-    }
-    else if (typeof pictureData == "string") {
-      for (var i = 0; i < this.pictures.length; i++) {
-        if (!(this.pictures[i].url.indexOf(pictureData) == -1)) {
-          this._fillPicture(this.pictures[i]);
-          this.startingPicture = i;
-          break;
-        }
-      }
-    }
-  };
-
-  this._fillPicture = function(picture) {
-    location.hash = picture.url;
-    this.gallery.classList.remove('invisible');
-    this.imgTag = this.gallery.querySelector('img');
-    this.imgTag.setAttribute('src', picture.url);
-    this.gallery.querySelector('.likes-count').textContent = picture.likes;
-    this.gallery.querySelector('.comments-count').textContent = picture.comments;
-  };
-
-  this.remove = function() {
-    window.removeEventListener('keyup', this._onDocumentKeyDown.bind(this));
-    this.gallery.removeEventListener('click', this._onOverlayClick.bind(this));
-    this.gallery.querySelector('.gallery-overlay-image').removeEventListener('click', this._onPhotoClick.bind(this));
-  };
-
-  this._onPhotoClick = function() {
-    this.startingPicture++;
-    if (this.startingPicture > this.pictures.length) {
-      this.startingPicture = 0;
-    }
-    this.remove();
-    this.showGallery(this.startingPicture);
-  };
-
-
-
   window.addEventListener('hashchange', this._onHashChange.bind(this));
   window.addEventListener('pageshow', this._onHashChange.bind(this));
   window.addEventListener('keyup', this._onDocumentKeyDown.bind(this));
@@ -69,12 +22,19 @@ Gallery.prototype.setHash = function(pictureData) {
   }
 };
 
+Gallery.prototype._fillPicture = function(picture) {
+  location.hash = picture.url;
+  this.gallery.classList.remove('invisible');
+  this.imgTag = this.gallery.querySelector('img');
+  this.imgTag.setAttribute('src', picture.url);
+  this.gallery.querySelector('.likes-count').textContent = picture.likes;
+  this.gallery.querySelector('.comments-count').textContent = picture.comments;
+};
 
 Gallery.prototype.showGallery = function(pictureData) {
   if (typeof pictureData == "number") {
     this.startingPicture = pictureData;
     this._fillPicture(this.pictures[this.startingPicture]);
-    this.startingPicture = pictureData;
   }
   else if (typeof pictureData == "string") {
     for (var i = 0; i < this.pictures.length; i++) {
@@ -87,6 +47,9 @@ Gallery.prototype.showGallery = function(pictureData) {
   }
 };
 
+Gallery.prototype.setParams = function(data) {
+  this.pictures = data;
+};
 
 Gallery.prototype._onPhotoClick = function() {
   this.startingPicture++;
@@ -120,5 +83,12 @@ Gallery.prototype.closeGallery = function() {
   this.remove();
   this.gallery.classList.add('invisible');
 };
+
+Gallery.prototype.remove = function() {
+  window.removeEventListener('keyup', this._onDocumentKeyDown.bind(this));
+  this.gallery.removeEventListener('click', this._onOverlayClick.bind(this));
+  this.gallery.querySelector('.gallery-overlay-image').removeEventListener('click', this._onPhotoClick.bind(this));
+};
+
 
 module.exports = new Gallery;
