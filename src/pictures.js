@@ -7,7 +7,6 @@ var utils = require('./utils');
 var Gallery = require('./gallery');
 var Picture = require('./modules/addPicture');
 
-
 var THROTTLE_DELAY = 100;
 var AJAX_SERVER_URL = 'https://o0.github.io/assets/json/pictures.json';
 var filters = document.querySelector('.filters');
@@ -31,15 +30,15 @@ var selectTemplate = function() {
   return document.querySelector('#picture-template');
 };
 
-var setScrollEnabled = function(pictures, pageNumber, pictureVolume, callback) {
+var setScrollEnabled = function(picturesF, pageNumberF, pictureVolumeF, callback) {
   var lastCall = Date.now();
 
   window.addEventListener('scroll', function() {
     if (Date.now() - lastCall >= THROTTLE_DELAY) {
       console.log('scroll event');
-      if (utils.isBottomReached() && utils.isNextPageAvailable(pictures, pageNumber, pictureVolume)) {
+      if (utils.isBottomReached() && utils.isNextPageAvailable(picturesF, pageNumberF, pictureVolumeF)) {
         pageNumber++;
-        callback(pictures, pageNumber);
+        callback(picturesF, pageNumberF);
       }
     }
   });
@@ -81,11 +80,11 @@ var getPictures = function(callback) {
   xhr.send();
 };
 
-var setFilters = function(filter, pictures) {
+var setFilters = function(filter, picturesF) {
   var label;
   var returnArray;
   pageNumber = 0;
-  var picturesDefault = pictures.slice(0);
+  var picturesDefault = picturesF.slice(0);
 
   var _createFilteredArray = function(filterElement) {
     switch (filterElement.id) {
@@ -97,7 +96,7 @@ var setFilters = function(filter, pictures) {
         }
         break;
       case 'filter-new':
-        var picturesForLast4Days = pictures.filter(function(picture) {
+        var picturesForLast4Days = picturesF.filter(function(picture) {
           var FourDayBefore = Date.now() - 345600000;
           var timestamp = new Date(picture.date);
           var difference = timestamp.getTime() - FourDayBefore;
@@ -115,7 +114,7 @@ var setFilters = function(filter, pictures) {
         }
         break;
       case 'filter-discussed':
-        var picturesDiscussed = pictures.sort(function(a, b) {
+        var picturesDiscussed = picturesF.sort(function(a, b) {
           return b.comments - a.comments;
         });
         label = document.querySelector('#filter-discussed ~ label');
