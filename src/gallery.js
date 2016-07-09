@@ -6,11 +6,16 @@ var Gallery = function() {
   this.startingPicture = 0;
   this.gallery = document.querySelector('.gallery-overlay');
 
+  this._onDocumentKeyDownBinded = this._onDocumentKeyDown.bind(this);
+  this._onOverlayClickBinded = this._onOverlayClick.bind(this);
+  this._onPhotoClickBinded = this._onPhotoClick.bind(this);
+
+
   window.addEventListener('hashchange', this._onHashChange.bind(this));
   window.addEventListener('pageshow', this._onHashChange.bind(this));
-  window.addEventListener('keyup', this._onDocumentKeyDown.bind(this));
-  this.gallery.addEventListener('click', this._onOverlayClick.bind(this));
-  this.gallery.querySelector('.gallery-overlay-image').addEventListener('click', this._onPhotoClick.bind(this));
+  window.addEventListener('keyup', this._onDocumentKeyDownBinded);
+  this.gallery.addEventListener('click', this._onOverlayClickBinded);
+  this.gallery.querySelector('.gallery-overlay-image').addEventListener('click', this._onPhotoClickBinded);
 };
 
 Gallery.prototype.setHash = function(pictureData) {
@@ -85,9 +90,9 @@ Gallery.prototype.closeGallery = function() {
 };
 
 Gallery.prototype.remove = function() {
-  window.removeEventListener('keyup', this._onDocumentKeyDown.bind(this));
-  this.gallery.removeEventListener('click', this._onOverlayClick.bind(this));
-  this.gallery.querySelector('.gallery-overlay-image').removeEventListener('click', this._onPhotoClick.bind(this));
+  window.removeEventListener('keyup', this._onDocumentKeyDownBinded);
+  this.gallery.removeEventListener('click', this._onOverlayClickBinded);
+  this.gallery.querySelector('.gallery-overlay-image').removeEventListener('click', this._onPhotoClickBinded);
 };
 
 

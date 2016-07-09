@@ -7,6 +7,7 @@ var utils = require('./utils');
 var Gallery = require('./gallery');
 var Picture = require('./modules/addPicture');
 
+
 var THROTTLE_DELAY = 100;
 var AJAX_SERVER_URL = 'https://o0.github.io/assets/json/pictures.json';
 var filters = document.querySelector('.filters');
@@ -131,11 +132,11 @@ var setFilters = function(filter, picturesF) {
   if (localStorage.getItem('lastFilter') && setFilterCallValue === 0) {
     document.querySelector('#' + localStorage.getItem('lastFilter')).checked = true;
   }
-  for (var i = 0; i < filtersRadio.length; i++) {
-    if (filtersRadio[i].type === 'radio') {
-      _createFilteredArray(filtersRadio[i]);
+  filtersRadio.forEach(function(filter) {
+    if (filter.type === 'radio') {
+      _createFilteredArray(filter);
     }
-  }
+  });
   setFilterCallValue++;
   return returnArray;
 };

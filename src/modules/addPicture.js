@@ -9,8 +9,8 @@ var Photo = function(data, container, Gallery) {
   this.data = data;
   this.element = getPictureClone(this.data);
   this.gallery = Gallery;
-
-  this.element.addEventListener('click', this.onClick.bind(this));
+  this._onClickBinded = this.onClick.bind(this);
+  this.element.addEventListener('click', this._onClickBinded);
   container.appendChild(this.element);
 };
 
@@ -20,13 +20,14 @@ Photo.prototype.onClick = function(evt) {
 };
 
 Photo.prototype.remove = function() {
-  this.element.removeEventListener('click', this.onClick);
+  this.element.removeEventListener('click', this._onClickBinded);
   this.element.parentNode.removeChild(this.element);
 };
 
 var Empty = function(container) {
   this.element = emptyPictures();
-  this.element.addEventListener('click', this.onClick.bind(this));
+  this._onClickBinded = this.onClick.bind(this);
+  this.element.addEventListener('click', this._onClickBinded);
   container.appendChild(this.element);
 };
 
@@ -35,6 +36,7 @@ Empty.prototype.onClick = function(evt) {
 };
 
 Empty.prototype.remove = function() {
+  this.element.removeEventListener('click', this._onClickBinded);
   this.element.parentNode.removeChild(this.element);
 };
 
