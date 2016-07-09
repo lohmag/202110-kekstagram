@@ -132,9 +132,9 @@ var setFilters = function(filter, picturesF) {
   if (localStorage.getItem('lastFilter') && setFilterCallValue === 0) {
     document.querySelector('#' + localStorage.getItem('lastFilter')).checked = true;
   }
-  filtersRadio.forEach(function(filter) {
-    if (filter.type === 'radio') {
-      _createFilteredArray(filter);
+  filtersRadio.forEach(function(filterInput) {
+    if (filterInput.type === 'radio') {
+      _createFilteredArray(filterInput);
     }
   });
   setFilterCallValue++;
